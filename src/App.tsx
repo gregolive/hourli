@@ -1,8 +1,11 @@
-const App = () => {
-  return (
-    <div className=''>
+import { ReactElement } from 'react';
+import Header from './components/Header';
 
-    </div>
+const App = (): ReactElement => {
+  return (
+    <>
+      <Header />
+    </>
   );
 };
 
