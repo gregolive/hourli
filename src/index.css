@@ -1,3 +1,18 @@
+@import-normalize;
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer components {
+  .app {
+    @apply bg-stone-50 dark:bg-gray-800 
+    text-neutral-900 dark:text-neutral-50
+    flex flex-col items-center
+    h-screen w-screen
+  }
+
+  .header {
+    @apply flex items-center justify-between 
+    w-10/12 max-w-lg py-2 sm:py-3
+  }
+}
