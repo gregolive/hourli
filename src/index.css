@@ -5,14 +5,16 @@
 
 @layer components {
   .app {
-    @apply bg-stone-50 dark:bg-gray-800 
-    text-neutral-900 dark:text-neutral-50
-    flex flex-col items-center
-    h-screen w-screen
+    @apply bg-stone-50 dark:bg-gray-800 text-neutral-900 dark:text-neutral-50
+    flex flex-col items-center justify-between h-screen w-screen
   }
 
   .header {
     @apply flex items-center justify-between 
-    w-10/12 max-w-lg py-2 sm:py-3
+    w-10/12 max-w-lg pt-2 sm:py-3
+  }
+
+  .timer-btn {
+    @apply text-2xl font-medium py-1 rounded
   }
 }

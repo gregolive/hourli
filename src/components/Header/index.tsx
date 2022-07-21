@@ -4,9 +4,9 @@ import { FaSun, FaMoon } from 'react-icons/fa';
 
 const HeaderTitle = (): ReactElement => {
   return (
-    <h1 className='text-4xl italic'>
-      <span className='text-red-400 font-bold'>hour</span>
-      <span className='text-sky-400 font-medium'>min</span>
+    <h1 className='text-4xl font-medium'>
+      <span className='text-teal-500'>hour</span>
+      <span className='text-neutral-900 dark:text-neutral-50'>.li</span>
     </h1>
   );
 }
@@ -18,7 +18,7 @@ const ThemeSwitch = (): ReactElement => {
   return (
     <button onClick={toggleTheme}>
       {darkTheme ? (
-        <FaMoon size='30' className='text-sky-400' />
+        <FaMoon size='30' className='text-sky-300' />
       ) : (
         <FaSun size='30' className='text-red-400' />
       )}
