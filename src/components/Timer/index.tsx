@@ -1,5 +1,6 @@
 import { useState, useEffect, ReactElement } from 'react';
 import { BiCoffeeTogo } from 'react-icons/bi';
+import TimerButton from './TimerButton';
 
 interface SubComponentProps {
   time: number,
@@ -34,9 +35,9 @@ const BreakInfo = ({ time }: SubComponentProps): ReactElement => {
 
 const Timer = (): ReactElement => {
   const [time, setTime] = useState(0);
+  const [breakTime, setBreakTime] = useState(0);
   const [timing, setTiming] = useState(false);
   const [working, setWorking] = useState(false);
-  const [breakTime, setBreakTime] = useState(0);
   
   const toggleTimer = (): void => setTiming(!timing);
   const clockInOut = (): void => {
@@ -66,19 +67,18 @@ const Timer = (): ReactElement => {
     <div className='grid grid-cols-2 gap-x-3 gap-y-5'>
       <Counter time={time} />
 
-      <button 
-        onClick={clockInOut}
-        className='timer-btn bg-teal-500 text-neutral-50 dark:text-neutral-900 drop-shadow-md'
-      >
-        {(working) ? 'Clock out' : 'Clock in'}
-      </button>
+      <TimerButton 
+        handleClick={clockInOut}
+        styles='bg-teal-500 text-neutral-50 dark:text-neutral-900'
+        text={(working) ? 'Clock out' : 'Clock in'}
+      />
 
-      <button
-        onClick={toggleTimer}
-        className='timer-btn bg-gray-300 dark:bg-cyan-900 drop-shadow'
-      >
-        {(working && !timing) ? 'Off Break' : 'Break'}
-      </button>
+      <TimerButton 
+        handleClick={toggleTimer}
+        styles='bg-gray-300 dark:bg-cyan-900'
+        text={(working && !timing) ? 'Off Break' : 'Break'}
+        disabled={!working}
+      />
 
       <div className='text-xl flex items-center justify-center col-span-2 gap-1 h-7'>
         {(working && !timing) && <BreakInfo time={breakTime} />}
