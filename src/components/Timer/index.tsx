@@ -1,6 +1,8 @@
 import { useState, useEffect, ReactElement } from 'react';
+import { AnimatePresence } from 'framer-motion';
 import { BiCoffeeTogo } from 'react-icons/bi';
 import TimerButton from './TimerButton';
+import SubmitModal from './SubmitModal';
 
 interface SubComponentProps {
   time: number,
@@ -34,71 +36,75 @@ const BreakInfo = ({ time }: SubComponentProps): ReactElement => {
 };
 
 const Timer = (): ReactElement => {
+  const [showModal, setShowModal] = useState(false);
   const [shiftStart, setShiftStart] = useState(0);
   const [shiftTime, setShiftTime] = useState(0);
   const [breakStart, setBreakStart] = useState(0);
-  const [breakTime, setBreakTime] = useState(0);
+  const [currBreak, setCurrBreak] = useState(0);
   const [breaks, setBreaks] = useState(0);
 
-  const clockInOut = (): void => {
-    if (!shiftStart) {
-      setShiftStart(Date.now());
-    } else {
-      setShiftStart(0);
-    }
+  const clockIn = (): void => setShiftStart(Date.now());
+
+  const clockOut = (): void => {
+    const currTime = shiftTime;
+    setShowModal(true);
   };
 
-  const toggleBreak = (): void => {
-    if (!breakStart) {
-      setBreakStart(Date.now());
-    } else {
-      setBreaks(breaks + breakTime);
-      setBreakStart(0);
-      setBreakTime(0);
-    }
+  const onBreak = (): void => setBreakStart(Date.now());
+
+  const offBreak = (): void => {
+    setBreaks(breaks + currBreak);
+    setBreakStart(0);
+    setCurrBreak(0);
   };
 
   // Update shift clock
   useEffect(() => {
     const tick = setTimeout(() => {
-      setShiftTime(Date.now() - shiftStart - breakTime - breaks);
+      setShiftTime(Date.now() - shiftStart - currBreak - breaks);
     }, 500);
     if (shiftStart === 0) clearInterval(tick);
 
     return () => clearTimeout(tick);
-  }, [shiftStart, shiftTime, breakTime, breaks]); 
+  }, [shiftStart, shiftTime, currBreak, breaks]); 
 
   // Update break clock
   useEffect(() => {
     const tock = setTimeout(() => {
-      setBreakTime(Date.now() - breakStart);
+      setCurrBreak(Date.now() - breakStart);
     }, 500);
     if (breakStart === 0) clearInterval(tock);
 
     return () => clearTimeout(tock);
-  }, [breakStart, breakTime]);
+  }, [breakStart, currBreak]);
 
   return (
-    <div className='grid grid-cols-2 gap-x-3 gap-y-5'>
-      <Counter time={shiftTime} />
+    <>
+      <div className='grid grid-cols-2 gap-x-3 gap-y-5'>
+        <Counter time={shiftTime} />
 
-      <TimerButton 
-        handleClick={clockInOut}
-        styles='bg-teal-500 text-neutral-50 dark:text-neutral-900'
-        text={(shiftStart) ? 'Clock out' : 'Clock in'}
-      />
+        <TimerButton 
+          handleClick={(shiftStart) ? clockOut : clockIn}
+          styles='bg-teal-500 text-neutral-50 dark:text-neutral-900'
+          text={(shiftStart) ? 'Clock out' : 'Clock in'}
+        />
 
-      <TimerButton 
-        handleClick={toggleBreak}
-        styles='bg-gray-300 dark:bg-cyan-900'
-        text={(breakStart) ? 'Off Break' : 'Break'}
-        disabled={!shiftStart}
-      />
+        <TimerButton 
+          handleClick={(breakStart) ? offBreak : onBreak}
+          styles='bg-gray-300 dark:bg-cyan-900'
+          text={(breakStart) ? 'Off Break' : 'Break'}
+          disabled={!shiftStart}
+        />
 
-      <div className='text-xl flex items-center justify-center col-span-2 gap-1 h-7'>
-        {(breakStart > 0) && <BreakInfo time={Date.now() - breakStart} />}
+        <div className='text-xl flex items-center justify-center col-span-2 gap-1 h-7'>
+          {(breakStart > 0) && <BreakInfo time={Date.now() - breakStart} />}
+        </div>
       </div>
-    </div>
+
+      <AnimatePresence exitBeforeEnter>
+        {showModal && <SubmitModal setShow={setShowModal} />}
+      </AnimatePresence>
+    </>
   );
 };
 

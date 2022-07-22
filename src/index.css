@@ -4,8 +4,12 @@
 @tailwind utilities;
 
 @layer components {
-  .app {
+  .theme-colors {
     @apply bg-stone-50 dark:bg-gray-800 text-neutral-900 dark:text-neutral-50
+  }
+
+  .app {
+    @apply theme-colors
     flex flex-col items-center justify-between h-screen w-screen
   }
 
@@ -18,5 +22,16 @@
     @apply text-2xl font-medium drop-shadow py-1 rounded
     hover:scale-105 transition-all duration-150 ease-in
     disabled:opacity-50 disabled:hover:scale-100
+  }
+
+  .backdrop {
+    @apply bg-neutral-900 bg-opacity-60
+    flex items-center justify-center
+    fixed top-0 left-0 h-full w-full z-10
+  }
+
+  .modal {
+    @apply theme-colors
+    w-1/2 h-1/2 rounded-lg
   }
 }
