@@ -17,5 +17,6 @@
   .timer-btn {
     @apply text-2xl font-medium drop-shadow py-1 rounded
     hover:scale-105 transition-all duration-150 ease-in
+    disabled:opacity-50 disabled:hover:scale-100
   }
 }

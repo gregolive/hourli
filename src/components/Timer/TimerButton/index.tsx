@@ -7,7 +7,7 @@ interface ButtonProps {
   disabled?: boolean,
 };
 
-const TimerButton = ({handleClick, styles, text, disabled}: ButtonProps): ReactElement => {
+const TimerButton = ({ handleClick, styles, text, disabled }: ButtonProps): ReactElement => {
   return (
     <button
       className={`timer-btn ${styles}`} 

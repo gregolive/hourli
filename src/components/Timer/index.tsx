@@ -14,7 +14,7 @@ const formatClock = (time: number, div: number): string => {
 const Counter = ({ time }: SubComponentProps): ReactElement => {
   return (
     <div className='text-8xl sm:text-9xl flex justify-center col-span-2'>
-      <span className='w-32 sm:w-40 text-end'>{formatClock(time, 3600000)}</span>
+      <span className='w-32 sm:w-40 text-end'>{formatClock(time, 1000)}</span>
       <span>:</span>
       <span className='w-32 sm:w-40'>{formatClock(time, 60000)}</span>
     </div>
@@ -25,63 +25,78 @@ const BreakInfo = ({ time }: SubComponentProps): ReactElement => {
   return (
     <>
       <BiCoffeeTogo />
-      <span>Break time</span>
+      <span>On break</span>
       <span className='w-14'>
-        {formatClock(time, 3600000)}:{formatClock(time, 60000)}
+        {formatClock(time, 1000)}:{formatClock(time, 60000)}
       </span>
     </>
   );
 };
 
 const Timer = (): ReactElement => {
-  const [time, setTime] = useState(0);
+  const [shiftStart, setShiftStart] = useState(0);
+  const [shiftTime, setShiftTime] = useState(0);
+  const [breakStart, setBreakStart] = useState(0);
   const [breakTime, setBreakTime] = useState(0);
-  const [timing, setTiming] = useState(false);
-  const [working, setWorking] = useState(false);
-  
-  const toggleTimer = (): void => setTiming(!timing);
+  const [breaks, setBreaks] = useState(0);
+
   const clockInOut = (): void => {
-    setWorking(!working);
-    toggleTimer();
+    if (!shiftStart) {
+      setShiftStart(Date.now());
+    } else {
+      setShiftStart(0);
+    }
   };
 
+  const toggleBreak = (): void => {
+    if (!breakStart) {
+      setBreakStart(Date.now());
+    } else {
+      setBreaks(breaks + breakTime);
+      setBreakStart(0);
+      setBreakTime(0);
+    }
+  };
+
+  // Update shift clock
   useEffect(() => {
-    let tick = setTimeout(() => {
-      setTime(time + 1000);
-    }, 1000);
-    if (!timing) clearInterval(tick);
+    const tick = setTimeout(() => {
+      setShiftTime(Date.now() - shiftStart - breakTime - breaks);
+    }, 500);
+    if (shiftStart === 0) clearInterval(tick);
 
     return () => clearTimeout(tick);
-  }, [time, timing]);
+  }, [shiftStart, shiftTime, breakTime, breaks]); 
 
+  // Update break clock
   useEffect(() => {
-    let tock = setTimeout(() => {
-      setBreakTime(breakTime + 1000);
-    }, 1000);
-    if (working && timing) clearInterval(tock);
+    const tock = setTimeout(() => {
+      setBreakTime(Date.now() - breakStart);
+    }, 500);
+    if (breakStart === 0) clearInterval(tock);
 
     return () => clearTimeout(tock);
-  }, [breakTime, timing, working]);
+  }, [breakStart, breakTime]);
 
   return (
     <div className='grid grid-cols-2 gap-x-3 gap-y-5'>
-      <Counter time={time} />
+      <Counter time={shiftTime} />
 
       <TimerButton 
         handleClick={clockInOut}
         styles='bg-teal-500 text-neutral-50 dark:text-neutral-900'
-        text={(working) ? 'Clock out' : 'Clock in'}
+        text={(shiftStart) ? 'Clock out' : 'Clock in'}
       />
 
       <TimerButton 
-        handleClick={toggleTimer}
+        handleClick={toggleBreak}
         styles='bg-gray-300 dark:bg-cyan-900'
-        text={(working && !timing) ? 'Off Break' : 'Break'}
-        disabled={!working}
+        text={(breakStart) ? 'Off Break' : 'Break'}
+        disabled={!shiftStart}
       />
 
       <div className='text-xl flex items-center justify-center col-span-2 gap-1 h-7'>
-        {(working && !timing) && <BreakInfo time={breakTime} />}
+        {(breakStart > 0) && <BreakInfo time={Date.now() - breakStart} />}
       </div>
     </div>
   );
