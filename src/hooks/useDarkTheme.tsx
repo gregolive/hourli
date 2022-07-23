@@ -1,18 +1,5 @@
-import { useEffect, useState } from 'react';
-
-const useLocalStorage = (key: string, initialValue: boolean) => {
-  const [storedValue, setStoredValue] = useState(() => {
-    const item = JSON.parse(window.localStorage.getItem(key) || '');
-    return item ? JSON.parse(item) : initialValue;
-  });
-
-  const setValue = (value: boolean): void => {
-    setStoredValue(value);
-    window.localStorage.setItem(key, JSON.stringify(value));
-  };
-
-  return [storedValue, setValue];
-};
+import { useEffect } from 'react';
+import useLocalStorage from './useLocalStorage';
 
 const useDarkTheme = () => {
   const [enabled, setEnabled] = useLocalStorage('dark-theme', false);

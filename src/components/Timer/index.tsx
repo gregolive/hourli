@@ -33,27 +33,39 @@ const BreakInfo = ({ time, formatTime }: SubComponentProps): ReactElement => {
 
 const Timer = (): ReactElement => {
   const [showModal, setShowModal] = useState(false);
-  const [shiftStart, setShiftStart] = useState(0);
+  const [shiftStart, setShiftStart] = useState(JSON.parse(window.localStorage.getItem('shiftStart') || '0'));
   const [shiftTime, setShiftTime] = useState(0);
-  const [breakStart, setBreakStart] = useState(0);
-  const [currBreak, setCurrBreak] = useState(0);
-  const [breaks, setBreaks] = useState(0);
+  const [breakStart, setBreakStart] = useState(JSON.parse(window.localStorage.getItem('breakStart') || '0'));
+  const [currBreak, setCurrBreak] = useState(JSON.parse(window.localStorage.getItem('currBreak') || '0'));
+  const [breaks, setBreaks] = useState(JSON.parse(window.localStorage.getItem('breaks') || '0'));
 
   const formatTime = (time: number, div: number): string => {
     const str = Math.floor((time / div) % 60).toString();
     return (str.length > 1) ? str : '0' + str;
   };  
 
-  const clockIn = (): void => setShiftStart(Date.now());
+  const clockIn = (): void => {
+    const time = Date.now();
+    setShiftStart(time);
+    window.localStorage.setItem('shiftStart', JSON.stringify(time));
+  };
 
   const clockOut = (): void => setShowModal(true);
 
-  const onBreak = (): void => setBreakStart(Date.now());
+  const onBreak = (): void => {
+    const time = Date.now();
+    setBreakStart(time);
+    window.localStorage.setItem('breakStart', JSON.stringify(time));
+  };
 
   const offBreak = (): void => {
-    setBreaks(breaks + currBreak);
+    const totalBreaks = breaks + currBreak;
+    setBreaks(totalBreaks);
+    window.localStorage.setItem('breaks', JSON.stringify(totalBreaks));
     setBreakStart(0);
+    window.localStorage.setItem('breakStart', JSON.stringify(0));
     setCurrBreak(0);
+    window.localStorage.setItem('currBreak', JSON.stringify(0));
   };
 
   // Update shift clock
@@ -69,7 +81,9 @@ const Timer = (): ReactElement => {
   // Update break clock
   useEffect(() => {
     const tock = setTimeout(() => {
-      setCurrBreak(Date.now() - breakStart);
+      const breakTime = Date.now() - breakStart;
+      setCurrBreak(breakTime);
+      window.localStorage.setItem('currBreak', JSON.stringify(breakTime));
     }, 500);
     if (breakStart === 0) clearInterval(tock);
 
