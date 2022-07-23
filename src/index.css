@@ -9,8 +9,26 @@
   }
 
   .app {
-    @apply theme-colors
-    flex flex-col items-center justify-between h-screen w-screen
+    @apply theme-colors h-screen w-screen
+    flex flex-col items-center justify-between
+  }
+
+  .btn {
+    @apply rounded font-medium drop-shadow py-1
+  }
+
+  .primary-btn {
+    @apply bg-teal-500 text-neutral-50 dark:text-neutral-900
+  }
+
+  .secondary-btn {
+    @apply bg-gray-300 dark:bg-cyan-900
+  }
+
+  .timer-btn {
+    @apply text-2xl
+    hover:scale-105 transition-all duration-150 ease-in
+    disabled:opacity-50 disabled:hover:scale-100
   }
 
   .header {
@@ -18,20 +36,16 @@
     w-10/12 max-w-lg pt-2 sm:py-3
   }
 
-  .timer-btn {
-    @apply text-2xl font-medium drop-shadow py-1 rounded
-    hover:scale-105 transition-all duration-150 ease-in
-    disabled:opacity-50 disabled:hover:scale-100
+  .modal {
+    @apply theme-colors rounded-lg
+    grid grid-cols-2 justify-items-center gap-x-3
+    p-5 w-4/5 lg:w-2/5 md:w-3/5
   }
 
   .backdrop {
-    @apply bg-neutral-900 bg-opacity-60
+    @apply bg-neutral-900 dark:bg-gray-500
+    bg-opacity-60 dark:bg-opacity-30
     flex items-center justify-center
     fixed top-0 left-0 h-full w-full z-10
-  }
-
-  .modal {
-    @apply theme-colors
-    w-1/2 h-1/2 rounded-lg
   }
 }

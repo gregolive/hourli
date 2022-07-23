@@ -1,35 +1,31 @@
 import { useState, useEffect, ReactElement } from 'react';
 import { AnimatePresence } from 'framer-motion';
 import { BiCoffeeTogo } from 'react-icons/bi';
-import TimerButton from './TimerButton';
+import Button from '../Button';
 import SubmitModal from './SubmitModal';
 
 interface SubComponentProps {
   time: number,
+  formatTime: Function,
 };
 
-const formatClock = (time: number, div: number): string => {
-  const str = Math.floor((time / div) % 60).toString();
-  return (str.length > 1) ? str : '0' + str;
-};
-
-const Counter = ({ time }: SubComponentProps): ReactElement => {
+const Counter = ({ time, formatTime }: SubComponentProps): ReactElement => {
   return (
     <div className='text-8xl sm:text-9xl flex justify-center col-span-2'>
-      <span className='w-32 sm:w-40 text-end'>{formatClock(time, 1000)}</span>
+      <span className='w-32 sm:w-40 text-end'>{formatTime(time, 1000)}</span>
       <span>:</span>
-      <span className='w-32 sm:w-40'>{formatClock(time, 60000)}</span>
+      <span className='w-32 sm:w-40'>{formatTime(time, 60000)}</span>
     </div>
   );
 };
 
-const BreakInfo = ({ time }: SubComponentProps): ReactElement => {
+const BreakInfo = ({ time, formatTime }: SubComponentProps): ReactElement => {
   return (
     <>
       <BiCoffeeTogo />
       <span>On break</span>
       <span className='w-14'>
-        {formatClock(time, 1000)}:{formatClock(time, 60000)}
+        {formatTime(time, 1000)}:{formatTime(time, 60000)}
       </span>
     </>
   );
@@ -43,12 +39,14 @@ const Timer = (): ReactElement => {
   const [currBreak, setCurrBreak] = useState(0);
   const [breaks, setBreaks] = useState(0);
 
+  const formatTime = (time: number, div: number): string => {
+    const str = Math.floor((time / div) % 60).toString();
+    return (str.length > 1) ? str : '0' + str;
+  };  
+
   const clockIn = (): void => setShiftStart(Date.now());
 
-  const clockOut = (): void => {
-    const currTime = shiftTime;
-    setShowModal(true);
-  };
+  const clockOut = (): void => setShowModal(true);
 
   const onBreak = (): void => setBreakStart(Date.now());
 
@@ -81,28 +79,36 @@ const Timer = (): ReactElement => {
   return (
     <>
       <div className='grid grid-cols-2 gap-x-3 gap-y-5'>
-        <Counter time={shiftTime} />
+        <Counter time={shiftTime} formatTime={formatTime} />
 
-        <TimerButton 
+        <Button 
           handleClick={(shiftStart) ? clockOut : clockIn}
-          styles='bg-teal-500 text-neutral-50 dark:text-neutral-900'
+          styles='primary-btn timer-btn'
           text={(shiftStart) ? 'Clock out' : 'Clock in'}
         />
 
-        <TimerButton 
+        <Button 
           handleClick={(breakStart) ? offBreak : onBreak}
-          styles='bg-gray-300 dark:bg-cyan-900'
+          styles='secondary-btn timer-btn'
           text={(breakStart) ? 'Off Break' : 'Break'}
           disabled={!shiftStart}
         />
 
         <div className='text-xl flex items-center justify-center col-span-2 gap-1 h-7'>
-          {(breakStart > 0) && <BreakInfo time={Date.now() - breakStart} />}
+          {(breakStart > 0) && 
+            <BreakInfo time={Date.now() - breakStart} formatTime={formatTime} />
+          }
         </div>
       </div>
 
       <AnimatePresence exitBeforeEnter>
-        {showModal && <SubmitModal setShow={setShowModal} />}
+        {showModal && 
+          <SubmitModal
+            setModal={setShowModal}
+            shift={shiftTime}
+            formatTime={formatTime}
+          />
+        }
       </AnimatePresence>
     </>
   );

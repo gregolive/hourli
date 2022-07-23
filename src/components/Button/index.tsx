@@ -7,10 +7,10 @@ interface ButtonProps {
   disabled?: boolean,
 };
 
-const TimerButton = ({ handleClick, styles, text, disabled }: ButtonProps): ReactElement => {
+const Button = ({ handleClick, styles, text, disabled }: ButtonProps): ReactElement => {
   return (
     <button
-      className={`timer-btn ${styles}`} 
+      className={`btn ${styles}`} 
       onClick={() => handleClick()}
       disabled={disabled}
     >
@@ -19,4 +19,4 @@ const TimerButton = ({ handleClick, styles, text, disabled }: ButtonProps): Reac
   );
 };
 
-export default TimerButton;
+export default Button;
