@@ -2,7 +2,7 @@ import { useState, useEffect, ReactElement } from 'react';
 import { AnimatePresence } from 'framer-motion';
 import { BiCoffeeTogo } from 'react-icons/bi';
 import Button from '../Button';
-import ConfirmModal from './Confirm';
+import SubmitModal from './SubmitModal';
 import { formatTime } from '../../assets/helpers/formatTime';
 
 interface SubComponentProps {
@@ -109,12 +109,12 @@ const Timer = (): ReactElement => {
           }
         </div>
       </div>
-
+      
       <AnimatePresence exitBeforeEnter>
-        {showModal && 
-          <ConfirmModal
-            closeModal={() => setShowModal(false)}
+        {showModal &&
+          <SubmitModal 
             shift={shiftTime}
+            closeModal={() => setShowModal(false)}
           />
         }
       </AnimatePresence>

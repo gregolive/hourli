@@ -1,22 +1,18 @@
 import { useState, ReactElement } from 'react';
-import Modal from '../../Modal';
-import Button from '../../Button';
-import { formatTime } from '../../../assets/helpers/formatTime';
-import congratsImg from '../../../assets/img/congrats.png';
+import Modal from '../../../Modal';
+import Button from '../../../Button';
+import { formatTime } from '../../../../assets/helpers/formatTime';
+import congratsImg from '../../../../assets/img/congrats.png';
 
 interface ConfirmProps {
-  closeModal: Function,
   shift: number,
+  confirmClockOut: Function,
+  closeModal: Function,
 };
 
-const ConfirmModal = ({ closeModal, shift }: ConfirmProps): ReactElement => {
+const ConfirmModal = ({ closeModal, confirmClockOut, shift }: ConfirmProps): ReactElement => {
   const [shiftTime, setShiftTime] = useState(shift); // eslint-disable-line
-
   const timeString = (): string => `${formatTime(shiftTime, 60000)}:${formatTime(shiftTime, 1000)}`;
-
-  const submitHours = (): void => {
-    
-  };
 
   return (
     <Modal
@@ -37,7 +33,7 @@ const ConfirmModal = ({ closeModal, shift }: ConfirmProps): ReactElement => {
           </p>
           
           <Button
-            handleClick={submitHours}
+            handleClick={confirmClockOut}
             styles='primary-btn timer-btn w-full'
             text='Clock out'
           />
