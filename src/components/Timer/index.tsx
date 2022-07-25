@@ -2,14 +2,14 @@ import { useState, useEffect, ReactElement } from 'react';
 import { AnimatePresence } from 'framer-motion';
 import { BiCoffeeTogo } from 'react-icons/bi';
 import Button from '../Button';
-import SubmitModal from './SubmitModal';
+import ConfirmModal from './Confirm';
+import { formatTime } from '../../assets/helpers/formatTime';
 
 interface SubComponentProps {
   time: number,
-  formatTime: Function,
 };
 
-const Counter = ({ time, formatTime }: SubComponentProps): ReactElement => {
+const Counter = ({ time }: SubComponentProps): ReactElement => {
   return (
     <div className='text-8xl sm:text-9xl flex justify-center col-span-2'>
       <span className='w-32 sm:w-40 text-end'>{formatTime(time, 1000)}</span>
@@ -19,7 +19,7 @@ const Counter = ({ time, formatTime }: SubComponentProps): ReactElement => {
   );
 };
 
-const BreakInfo = ({ time, formatTime }: SubComponentProps): ReactElement => {
+const BreakInfo = ({ time }: SubComponentProps): ReactElement => {
   return (
     <>
       <BiCoffeeTogo />
@@ -37,12 +37,7 @@ const Timer = (): ReactElement => {
   const [shiftTime, setShiftTime] = useState(0);
   const [breakStart, setBreakStart] = useState(JSON.parse(window.localStorage.getItem('breakStart') || '0'));
   const [currBreak, setCurrBreak] = useState(JSON.parse(window.localStorage.getItem('currBreak') || '0'));
-  const [breaks, setBreaks] = useState(JSON.parse(window.localStorage.getItem('breaks') || '0'));
-
-  const formatTime = (time: number, div: number): string => {
-    const str = Math.floor((time / div) % 60).toString();
-    return (str.length > 1) ? str : '0' + str;
-  };  
+  const [breaks, setBreaks] = useState(JSON.parse(window.localStorage.getItem('breaks') || '0'));  
 
   const clockIn = (): void => {
     const time = Date.now();
@@ -93,7 +88,7 @@ const Timer = (): ReactElement => {
   return (
     <>
       <div className='grid grid-cols-2 gap-x-3 gap-y-5'>
-        <Counter time={shiftTime} formatTime={formatTime} />
+        <Counter time={shiftTime} />
 
         <Button 
           handleClick={(shiftStart) ? clockOut : clockIn}
@@ -110,17 +105,16 @@ const Timer = (): ReactElement => {
 
         <div className='text-xl flex items-center justify-center col-span-2 gap-1 h-7'>
           {(breakStart > 0) && 
-            <BreakInfo time={Date.now() - breakStart} formatTime={formatTime} />
+            <BreakInfo time={Date.now() - breakStart} />
           }
         </div>
       </div>
 
       <AnimatePresence exitBeforeEnter>
         {showModal && 
-          <SubmitModal
-            setModal={setShowModal}
+          <ConfirmModal
+            closeModal={() => setShowModal(false)}
             shift={shiftTime}
-            formatTime={formatTime}
           />
         }
       </AnimatePresence>
