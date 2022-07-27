@@ -5,13 +5,13 @@ import { formatTime } from '../../../../assets/helpers/formatTime';
 import congratsImg from '../../../../assets/img/congrats.png';
 
 interface ConfirmProps {
-  shift: number,
+  time: number,
   confirmClockOut: Function,
   closeModal: Function,
 };
 
-const ConfirmModal = ({ closeModal, confirmClockOut, shift }: ConfirmProps): ReactElement => {
-  const [shiftTime, setShiftTime] = useState(shift); // eslint-disable-line
+const ConfirmModal = ({ closeModal, confirmClockOut, time }: ConfirmProps): ReactElement => {
+  const [shiftTime, setShiftTime] = useState(time); // eslint-disable-line
   const timeString = (): string => `${formatTime(shiftTime, 60000)}:${formatTime(shiftTime, 1000)}`;
 
   return (

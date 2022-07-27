@@ -113,7 +113,11 @@ const Timer = (): ReactElement => {
       <AnimatePresence exitBeforeEnter>
         {showModal &&
           <SubmitModal 
-            shift={shiftTime}
+            shift={{
+              start: shiftStart,
+              length: shiftTime,
+              breaks: breaks,
+            }}
             closeModal={() => setShowModal(false)}
           />
         }
