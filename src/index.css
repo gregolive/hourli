@@ -48,4 +48,8 @@
     flex items-center justify-center
     fixed top-0 left-0 h-full w-full z-10
   }
+
+  .input {
+    @apply bg-transparent 
+  }
 }
