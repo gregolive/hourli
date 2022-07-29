@@ -1,6 +1,7 @@
 import { useState, useRef, ReactElement } from 'react';
 import axios from 'axios';
 import CircularProgress from '@mui/material/CircularProgress';
+import GoogleAuthBtn from '../AuthButton/Google';
 
 interface ServerError {
   email?: string;
@@ -23,7 +24,7 @@ const Register = (): ReactElement => {
   });
   const [submitError, setSubmitError] = useState<ServerError>({});
 
-  const buildFormData = () => {
+  const buildFormData = (): FormData => {
     const formData = new FormData();
     formData.append('email', userData.email);
     formData.append('password', userData.password);
@@ -91,9 +92,11 @@ const Register = (): ReactElement => {
         
         <form className='grid gap-3' ref={form.current} onSubmit={handleSubmit} noValidate>
           <fieldset className='grid gap-1'>
-            <label>Confirm Password</label>
+            <label className='label' htmlFor='email'>
+              Email
+            </label>
             <input
-              className='input'
+              className={`input ${(inputError.email) && 'error'}`}
               type='email'
               id='email'
               name='email'
@@ -102,36 +105,59 @@ const Register = (): ReactElement => {
               onBlur={(e) => validateInput(e)}
               required
             />
+            <small className={(inputError.email) ? 'text-red-600 dark:text-red-500' : 'hidden'}>
+              {inputError.email}
+            </small>
           </fieldset>
             
           <fieldset className='grid gap-1'>
-            <label>Password</label>
+            <label className='label' htmlFor='password'>
+              Password
+            </label>
             <input
-              className='input'
+              className={`input ${(inputError.password) && 'error'}`}
               type='password'
               id='password'
               name='password'
               value={userData.password}
               onChange={handleChange}
               onBlur={(e) => validateInput(e)}
+              pattern='(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*_=+-]).{6,}'
               required
             />
+            <small className={(inputError.password) ? 'text-red-600 dark:text-red-500' : 'hidden'}>
+              {inputError.password}
+            </small>
           </fieldset>
 
           <fieldset className='grid gap-1'>
-            <label>Confirm Password</label>
+            <label className='label' htmlFor='passwordConfirmation'>
+              Confirm Password
+            </label>
             <input
-              className='input'
+              className={`input ${(inputError.passwordConfirmation) && 'error'}`}
               type='password'
               id='passwordConfirmation'
               name='passwordConfirmation'
               value={userData.passwordConfirmation}
               onChange={handleChange}
               onBlur={(e) => validateInput(e)}
+              pattern={userData.password}
               required
             />
+            <small className={(inputError.passwordConfirmation) ? 'text-red-600 dark:text-red-500' : 'hidden'}>
+              {inputError.passwordConfirmation}
+            </small>
           </fieldset>
+
+          <button className='btn primary-btn color-btn' type='submit'>Sign up</button>
         </form>
+
+        <hr className='border-t my-5 dark:border-gray-600' />
+
+        <div className='grid gap-3'>
+          <GoogleAuthBtn />
+        </div>
       </div>
     )
   );

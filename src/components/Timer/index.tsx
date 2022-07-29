@@ -92,13 +92,13 @@ const Timer = (): ReactElement => {
 
         <Button 
           handleClick={(shiftStart) ? clockOut : clockIn}
-          styles='primary-btn timer-btn'
+          styles='primary-btn grow-btn text-2xl'
           text={(shiftStart) ? 'Clock out' : 'Clock in'}
         />
 
         <Button 
           handleClick={(breakStart) ? offBreak : onBreak}
-          styles='secondary-btn timer-btn'
+          styles='secondary-btn grow-btn text-2xl'
           text={(breakStart) ? 'Off Break' : 'Break'}
           disabled={!shiftStart}
         />
