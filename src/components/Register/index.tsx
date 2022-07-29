@@ -1,7 +1,7 @@
 import { useState, useRef, ReactElement } from 'react';
 import axios from 'axios';
 import CircularProgress from '@mui/material/CircularProgress';
-import GoogleAuthBtn from '../AuthButton/Google';
+import AuthButtons from '../AuthButtons';
 
 interface ServerError {
   email?: string;
@@ -155,9 +155,7 @@ const Register = (): ReactElement => {
 
         <hr className='border-t my-5 dark:border-gray-600' />
 
-        <div className='grid gap-3'>
-          <GoogleAuthBtn />
-        </div>
+        <AuthButtons />
       </div>
     )
   );

@@ -28,7 +28,7 @@ const SubmitModal = ({ shift, closeModal }: SubmitModalProps): ReactElement => {
 
   const handleSubmit = (): void => {
     const formData = buildFormData();
-    const url = `${process.env.REACT_APP_SERVER_URL}/shifts/create`;
+    const url = `${process.env.REACT_APP_SERVER_URL}/api/v1/shifts/create`;
     const config = { headers: { 'content-type': 'multipart/form-data' } };
 
     axios.post(url, formData, config)
