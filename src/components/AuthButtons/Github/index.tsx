@@ -6,7 +6,7 @@ const Github = (): ReactElement => {
   
   return (
     <button
-      className='btn auth-btn bg-zinc-800 text-white dark:border dark:border-white'
+      className='btn auth-btn github-btn'
       type='button'
       onClick={handleClick}
     >

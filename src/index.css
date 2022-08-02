@@ -39,6 +39,19 @@
     @apply hover:bg-teal-400
   }
 
+  .google-btn {
+    @apply bg-white text-blue-600 hover:bg-gray-50 dark:hover:bg-gray-200
+  }
+
+  .github-btn {
+    @apply bg-neutral-800 text-white hover:bg-neutral-700 dark:hover:bg-neutral-900
+    border border-transparent dark:border-gray-500 
+  }
+
+  .twitter-btn {
+    @apply bg-sky-500 text-white hover:bg-sky-400
+  }
+
   .header {
     @apply flex items-center justify-between 
     w-10/12 max-w-lg pt-2 sm:py-3

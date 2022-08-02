@@ -6,7 +6,7 @@ const Google = (): ReactElement => {
 
   return (
     <button
-      className='btn auth-btn bg-white text-blue-600'
+      className='btn auth-btn google-btn'
       type='button'
       onClick={handleClick}
     >
