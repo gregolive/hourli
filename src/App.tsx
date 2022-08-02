@@ -1,6 +1,6 @@
 import { ReactElement } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import { AuthProvider, ProtectedRoute, UnprotectedRoute } from './components/AuthProvider';
+import { AuthProvider, ProtectedRoute, UnauthenticatedRoute } from './components/AuthProvider';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import Timer from './components/Timer';
@@ -19,7 +19,7 @@ const App = (): ReactElement => {
             />
             <Route
               path='/register'
-              element={<UnprotectedRoute><Register /></UnprotectedRoute>}
+              element={<UnauthenticatedRoute><Register /></UnauthenticatedRoute>}
             />
           </Routes>
           <Footer />

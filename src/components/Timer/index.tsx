@@ -1,4 +1,5 @@
 import { useState, useEffect, ReactElement } from 'react';
+import { useAuth } from '../AuthProvider';
 import { AnimatePresence } from 'framer-motion';
 import { BiCoffeeTogo } from 'react-icons/bi';
 import Button from '../Button';
@@ -32,6 +33,7 @@ const BreakInfo = ({ time }: SubComponentProps): ReactElement => {
 };
 
 const Timer = (): ReactElement => {
+  const { user } = useAuth();
   const [showModal, setShowModal] = useState(false);
   const [shiftStart, setShiftStart] = useState(JSON.parse(window.localStorage.getItem('shiftStart') || '0'));
   const [shiftTime, setShiftTime] = useState(0);
