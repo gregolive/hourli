@@ -42,7 +42,7 @@ const Login = (): ReactElement => {
   const formSubmit = (): void => {
     const formData = buildFormData();
     const url = `${process.env.REACT_APP_SERVER_URL}/api/v1/auth/login`;
-    const config = { headers: { 'content-type': 'multipart/form-data' } };
+    const config = { headers: { 'content-type': 'multipart/form-data' }, withCredentials: true };
 
     axios.post(url, formData, config)
       .then((res) => {

@@ -1,5 +1,6 @@
 import { useState, useRef, ReactElement } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { useAuth } from '../AuthProvider';
 import axios from 'axios';
 import CircularProgress from '@mui/material/CircularProgress';
 import AuthButtons from '../AuthButtons';
@@ -18,6 +19,7 @@ interface ServerError {
 
 const Register = (): ReactElement => {
   const navigate = useNavigate();
+  const { handleLogin } = useAuth();
   const form = useRef();
   const [loading, setLoading] = useState(false);
   const [formError, setFormError] = useState(false);
@@ -44,13 +46,15 @@ const Register = (): ReactElement => {
   const formSubmit = (): void => {
     const formData = buildFormData();
     const url = `${process.env.REACT_APP_SERVER_URL}/api/v1/auth/register`;
-    const config = { headers: { 'content-type': 'multipart/form-data' } };
+    const config = { headers: { 'content-type': 'multipart/form-data' }, withCredentials: true };
 
     axios.post(url, formData, config)
       .then((res) => {
-        if (res.status === 200) navigate('/');
+        if (res.status === 200) {
+          handleLogin();
+          navigate('/');
+        }
       }, (err) => {
-        console.log(err.response.data.errors)
         setSubmitError(err.response.data.errors);
         setLoading(false);
       });
