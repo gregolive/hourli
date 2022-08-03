@@ -1,39 +1,32 @@
 import { useState, useRef, ReactElement } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { useAuth } from '../AuthProvider';
 import axios from 'axios';
 import CircularProgress from '@mui/material/CircularProgress';
 import AuthButtons from '../AuthButtons';
 
-type ErrorMessage = {
-  value: string;
-  msg: string;
-  param: string;
-  location: string;
-};
-
 interface ServerError {
-  email?: ErrorMessage;
-  password?: ErrorMessage;
+  email?: string;
+  password?: string;
 };
 
-const Register = (): ReactElement => {
+const Login = (): ReactElement => {
   const navigate = useNavigate();
+  const { handleLogin } = useAuth();
   const form = useRef();
-  const [loading, setLoading] = useState(false);
   const [formError, setFormError] = useState(false);
   const [userData, setUserData] = useState({
     email: '',
     password: '',
-    passwordConfirmation: '',
   });
   const [inputError, setInputError] = useState({
     email: '',
     password: '',
-    passwordConfirmation: '',
   });
   const [submitError, setSubmitError] = useState<ServerError>({});
+  const [loading, setLoading] = useState(false); 
 
-  const buildFormData = (): FormData => {
+  const buildFormData = () => {
     const formData = new FormData();
     formData.append('email', userData.email);
     formData.append('password', userData.password);
@@ -41,17 +34,25 @@ const Register = (): ReactElement => {
     return formData;
   };
 
+  const updateSubmitError = (msg: string): void => {
+    const err = (msg === 'Email not found') ? { email: 'Email not found' } : { password: 'Incorrect password' };
+    setSubmitError(err);
+  };
+
   const formSubmit = (): void => {
     const formData = buildFormData();
-    const url = `${process.env.REACT_APP_SERVER_URL}/api/v1/auth/register`;
+    const url = `${process.env.REACT_APP_SERVER_URL}/api/v1/auth/login`;
     const config = { headers: { 'content-type': 'multipart/form-data' } };
 
     axios.post(url, formData, config)
       .then((res) => {
-        if (res.status === 200) navigate('/');
+        if (res.status === 200) {
+          handleLogin();
+          navigate('/');
+        }
       }, (err) => {
-        console.log(err.response.data.errors)
-        setSubmitError(err.response.data.errors);
+        // format submit error with input key, server key is always 'message'
+        updateSubmitError(err.response.data.msg.message);
         setLoading(false);
       });
   };
@@ -69,6 +70,7 @@ const Register = (): ReactElement => {
   };
 
   const handleChange = (e: React.FocusEvent<HTMLInputElement>): void => {
+    setSubmitError({});
     setFormError(false);
     setUserData({ ...userData, [e.target.name]: e.target.value });
   };
@@ -78,29 +80,25 @@ const Register = (): ReactElement => {
 
     switch (true) {
       case validity['typeMismatch']:
-        setInputError({ ...inputError, [e.target.name]: `Please enter a valid ${e.target.name}` });
+        setInputError({ ...inputError, [e.target.name]: 'Please enter a valid email'});
         break;
       case validity['patternMismatch']:
-        if (e.target.name === 'password') {
-          setInputError({ ...inputError, [e.target.name]: 'Password must be at least 6 characters long and contain an uppercase letter, number, and special character' });
-          break;
-        }
-        setInputError({ ...inputError, [e.target.name]: 'Passwords must match' });
+        setInputError({ ...inputError, [e.target.name]: 'Password must be at least 6 characters long and contain an uppercase letter, number, and special character'});
         break;
       default:
-        setInputError({ ...inputError, [e.target.name]: '' });
+        setInputError({ ...inputError, [e.target.name]: ''});
     }
   };
-  
+
   return (
     (loading) ? (
       <CircularProgress className='!text-teal-500' />
     ) : (
       <div className='w-10/12 max-w-lg'>
-        <h2 className='text-3xl pb-4'>Create Account</h2>
+        <h2 className='text-3xl pb-4'>Sign in</h2>
         
         <form className='grid gap-3' ref={form.current} onSubmit={handleSubmit} noValidate>
-          <fieldset className='grid gap-1'>
+        <fieldset className='grid gap-1'>
             <label className='label' htmlFor='email'>
               Email
             </label>
@@ -115,7 +113,7 @@ const Register = (): ReactElement => {
               required
             />
             <small className={(inputError.email || submitError.email) ? 'text-red-600 dark:text-red-500' : 'hidden'}>
-              {inputError.email || (submitError.email && submitError.email.msg)}
+              {inputError.email || submitError.email}
             </small>
           </fieldset>
             
@@ -135,36 +133,16 @@ const Register = (): ReactElement => {
               required
             />
             <small className={(inputError.password || submitError.password) ? 'text-red-600 dark:text-red-500' : 'hidden'}>
-              {inputError.password || (submitError.password && submitError.password.msg)}
+              {inputError.password || submitError.password}
             </small>
           </fieldset>
 
-          <fieldset className='grid gap-1'>
-            <label className='label' htmlFor='passwordConfirmation'>
-              Confirm Password
-            </label>
-            <input
-              className={`input ${(inputError.passwordConfirmation) && 'error'}`}
-              type='password'
-              id='passwordConfirmation'
-              name='passwordConfirmation'
-              value={userData.passwordConfirmation}
-              onChange={handleChange}
-              onBlur={(e) => validateInput(e)}
-              pattern={userData.password}
-              required
-            />
-            <small className={(inputError.passwordConfirmation) ? 'text-red-600 dark:text-red-500' : 'hidden'}>
-              {inputError.passwordConfirmation}
-            </small>
-          </fieldset>
-
-          <button className='btn primary-btn color-btn' type='submit'>Sign up</button>
+          <button className='btn primary-btn color-btn' type='submit'>Sign in</button>
 
           {formError && <small className='text-red-600 dark:text-red-500'>Please fill in required fields with valid entries</small>}
 
           <p>
-            Already have an account? <Link to='/login' className='text-teal-500 hover:underline'>Log in</Link>
+            Don't have an account? <Link to='/register' className='text-teal-500 hover:underline'>Sign up</Link>
           </p>
         </form>
 
@@ -176,4 +154,4 @@ const Register = (): ReactElement => {
   );
 };
 
-export default Register;
+export default Login;

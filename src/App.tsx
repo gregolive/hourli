@@ -5,6 +5,8 @@ import Header from './components/Header';
 import Footer from './components/Footer';
 import Timer from './components/Timer';
 import Register from './components/Register';
+import Login from './components/Login';
+
 
 const App = (): ReactElement => {
   return (
@@ -20,6 +22,10 @@ const App = (): ReactElement => {
             <Route
               path='/register'
               element={<UnauthenticatedRoute><Register /></UnauthenticatedRoute>}
+            />
+            <Route
+              path='/login'
+              element={<UnauthenticatedRoute><Login /></UnauthenticatedRoute>}
             />
           </Routes>
           <Footer />

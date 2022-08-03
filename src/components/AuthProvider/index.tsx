@@ -16,31 +16,39 @@ const AuthProvider = ({ children }: any) => {
   const location = useLocation();
   const [user, setUser] = useState<User | null>(null);
 
+  // navigate when user updates
   useEffect(() => {
+    navigate(location.pathname); // eslint-disable-next-line
+  }, [user]);
+
+  const getUser = (): void => {
     axios.get(`${process.env.REACT_APP_SERVER_URL}/api/v1/auth/user`, { withCredentials: true })
       .then((res: AxiosResponse) => {
-        if (res.data) setUser(res.data);
+        console.log(res.data.length)
+        if (res.data.length > 0) setUser(res.data);
       });
+  };
+
+  // get user on mount
+  useEffect(() => {
+    getUser();
   }, []);
 
-  // navigate when user updates
-  // useEffect(() => {
-  //   navigate(location.pathname); // eslint-disable-next-line
-  // }, [user]);
-
-  const handleLogin = (loginUser: User): void => setUser(loginUser);
+  const handleLogin = (): void => getUser();
 
   const handleLogout = (): void => {
     axios.post(`${process.env.REACT_APP_SERVER_URL}/api/v1/auth/logout`, { withCredentials: true})
       .then((res: AxiosResponse) => {
         if (res.status === 200) {
           setUser(null);
-          navigate('/register');
+          navigate('/login');
         }
       });
   };
 
   const value: AuthContextProvider = { user, handleLogin, handleLogout };
+
+  console.log(user);
 
   return (
     <AuthContext.Provider value={value}>
