@@ -7,7 +7,6 @@ import Timer from './components/Timer';
 import Register from './components/Register';
 import Login from './components/Login';
 
-
 const App = (): ReactElement => {
   return (
     <Router basename={process.env.PUBLIC_URL}>
