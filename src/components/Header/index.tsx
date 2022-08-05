@@ -87,7 +87,7 @@ const HeaderButtons = (): ReactElement => {
           <HeaderIconBtn
             Icon={<FaUserPlus size='25' className='text-teal-500' />}
             handleClick={() => navigate('/register')}
-            tooltip='Sign up'
+            tooltip='Register'
           />
         </>
       )}

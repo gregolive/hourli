@@ -36,7 +36,7 @@ const AuthProvider = ({ children }: any) => {
   const handleLogin = (): void => getUser();
 
   const handleLogout = (): void => {
-    axios.post(`${process.env.REACT_APP_SERVER_URL}/api/v1/auth/logout`, { withCredentials: true})
+    axios.post(`${process.env.REACT_APP_SERVER_URL}/api/v1/auth/logout`, {}, { withCredentials: true })
       .then((res: AxiosResponse) => {
         if (res.status === 200) {
           setUser(null);
@@ -46,8 +46,6 @@ const AuthProvider = ({ children }: any) => {
   };
 
   const value: AuthContextProvider = { user, handleLogin, handleLogout };
-
-  console.log(user);
 
   return (
     <AuthContext.Provider value={value}>

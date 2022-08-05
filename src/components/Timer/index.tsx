@@ -4,6 +4,7 @@ import { AnimatePresence } from 'framer-motion';
 import { BiCoffeeTogo } from 'react-icons/bi';
 import Button from '../Button';
 import SubmitModal from './SubmitModal';
+import UserModal from './UserModal';
 import { formatTime } from '../../assets/helpers/formatTime';
 
 interface SubComponentProps {
@@ -34,7 +35,8 @@ const BreakInfo = ({ time }: SubComponentProps): ReactElement => {
 
 const Timer = (): ReactElement => {
   const { user } = useAuth();
-  const [showModal, setShowModal] = useState(false);
+  const [showSubmitModal, setShowSubmitModal] = useState(false);
+  const [showUserModal, setShowUserModal] = useState(false);
   const [shiftStart, setShiftStart] = useState(JSON.parse(window.localStorage.getItem('shiftStart') || '0'));
   const [shiftTime, setShiftTime] = useState(0);
   const [breakStart, setBreakStart] = useState(JSON.parse(window.localStorage.getItem('breakStart') || '0'));
@@ -42,12 +44,25 @@ const Timer = (): ReactElement => {
   const [breaks, setBreaks] = useState(JSON.parse(window.localStorage.getItem('breaks') || '0'));  
 
   const clockIn = (): void => {
+    if (!user) {
+      setShowUserModal(true);
+      return;
+    }
+
     const time = Date.now();
     setShiftStart(time);
     window.localStorage.setItem('shiftStart', JSON.stringify(time));
   };
 
-  const clockOut = (): void => setShowModal(true);
+  const clockOut = (): void => setShowSubmitModal(true);
+
+  const clockOutFinal = (): void => {
+    window.localStorage.setItem('shiftStart', '0');
+    window.localStorage.setItem('shiftTime', '0');
+    window.localStorage.setItem('breakStart', '0');
+    window.localStorage.setItem('currBreak', '0');
+    document.location.reload();
+  };
 
   const onBreak = (): void => {
     const time = Date.now();
@@ -93,7 +108,7 @@ const Timer = (): ReactElement => {
         <Counter time={shiftTime} />
 
         <Button 
-          handleClick={(shiftStart) ? clockOut : clockIn}
+          handleClick={(shiftStart) ? clockOutFinal : clockIn}
           styles='primary-btn grow-btn text-2xl'
           text={(shiftStart) ? 'Clock out' : 'Clock in'}
         />
@@ -113,16 +128,20 @@ const Timer = (): ReactElement => {
       </div>
       
       <AnimatePresence exitBeforeEnter>
-        {showModal &&
+        {showSubmitModal &&
           <SubmitModal 
             shift={{
               start: shiftStart,
               length: shiftTime,
               breaks: breaks,
             }}
-            closeModal={() => setShowModal(false)}
+            closeModal={() => setShowSubmitModal(false)}
           />
         }
+      </AnimatePresence>
+
+      <AnimatePresence exitBeforeEnter>
+        {showUserModal && <UserModal />}
       </AnimatePresence>
     </>
   );

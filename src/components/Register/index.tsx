@@ -163,7 +163,7 @@ const Register = (): ReactElement => {
             </small>
           </fieldset>
 
-          <button className='btn primary-btn color-btn' type='submit'>Sign up</button>
+          <button className='btn primary-btn primary-hover-btn' type='submit'>Sign up</button>
 
           {formError && <small className='text-red-600 dark:text-red-500'>Please fill in required fields with valid entries</small>}
 
