@@ -14,7 +14,7 @@ interface SubComponentProps {
 const Counter = ({ time }: SubComponentProps): ReactElement => {
   return (
     <div className='text-8xl sm:text-9xl flex justify-center col-span-2'>
-      <span className='w-32 sm:w-40 text-end'>{formatTime(time, 1000)}</span>
+      <span className='w-32 sm:w-40 text-end'>{formatTime(time, 3600000)}</span>
       <span>:</span>
       <span className='w-32 sm:w-40'>{formatTime(time, 60000)}</span>
     </div>
@@ -27,7 +27,7 @@ const BreakInfo = ({ time }: SubComponentProps): ReactElement => {
       <BiCoffeeTogo />
       <span>On break</span>
       <span className='w-14'>
-        {formatTime(time, 1000)}:{formatTime(time, 60000)}
+        {formatTime(time, 3600000)}:{formatTime(time, 60000)}
       </span>
     </>
   );
@@ -54,7 +54,14 @@ const Timer = (): ReactElement => {
     window.localStorage.setItem('shiftStart', JSON.stringify(time));
   };
 
-  const clockOut = (): void => setShowSubmitModal(true);
+  const clockOut = (): void => {
+    if (!user) {
+      setShowUserModal(true);
+      return;
+    }
+    
+    setShowSubmitModal(true);
+  };
 
   const clockOutFinal = (): void => {
     window.localStorage.setItem('shiftStart', '0');
@@ -62,7 +69,7 @@ const Timer = (): ReactElement => {
     window.localStorage.setItem('breakStart', '0');
     window.localStorage.setItem('currBreak', '0');
     window.localStorage.setItem('breaks', '0');
-    document.location.reload();
+    //document.location.reload();
   };
 
   const onBreak = (): void => {

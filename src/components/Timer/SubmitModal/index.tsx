@@ -1,4 +1,4 @@
-import { useState, ReactElement } from 'react';
+import { ReactElement } from 'react';
 import axios from 'axios';
 import Modal from '../../Modal';
 import Button from '../../Button';
@@ -19,8 +19,6 @@ interface SubmitModalProps {
 
 const SubmitModal = ({ shift, closeModal, clockOut }: SubmitModalProps): ReactElement => {
   const { start, length, breaks } = shift;
-  //const [confirmed, setConfirmed] = useState(false);
-  const timeString = (): string => `${formatTime(length, 60000)}:${formatTime(length, 1000)}`;
 
   const buildFormData = (): FormData => {
     const formData = new FormData();
@@ -32,18 +30,16 @@ const SubmitModal = ({ shift, closeModal, clockOut }: SubmitModalProps): ReactEl
   };
 
   const handleSubmit = (): void => {
-    clockOut();
-    // const formData = buildFormData();
-    // const url = `${process.env.REACT_APP_SERVER_URL}/api/v1/shifts/create`;
-    // const config = { headers: { 'content-type': 'multipart/form-data' } };
+    const formData = buildFormData();
+    const url = `${process.env.REACT_APP_SERVER_URL}/api/v1/shifts/create`;
+    const config = { headers: { 'content-type': 'multipart/form-data' }, withCredentials: true };
 
-    // axios.post(url, formData, config)
-    //   .then((res) => {
-    //     console.log(res.data);
-    //     clockOut();
-    //   }, (err) => {
-    //     console.log(err)
-    //   });
+    axios.post(url, formData, config)
+      .then((res) => {
+        clockOut();
+      }, (err) => {
+        console.log(err);
+      });
   };
 
   return (
@@ -62,7 +58,7 @@ const SubmitModal = ({ shift, closeModal, clockOut }: SubmitModalProps): ReactEl
             Quitting time?
           </h2>
           <p className='text-lg pb-4'>
-            {`Clock out of your ${timeString()} hour shift?`}
+            {`Clock out of your ${formatTime(length, 3600000)}:${formatTime(length, 60000)} hour shift?`}
           </p>
           
           <div className='flex w-full gap-3'>
