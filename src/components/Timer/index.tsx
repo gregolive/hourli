@@ -37,11 +37,11 @@ const Timer = (): ReactElement => {
   const { user } = useAuth();
   const [showSubmitModal, setShowSubmitModal] = useState(false);
   const [showUserModal, setShowUserModal] = useState(false);
-  const [shiftStart, setShiftStart] = useState(JSON.parse(window.localStorage.getItem('shiftStart') || '0'));
+  const [shiftStart, setShiftStart] = useState<number>(JSON.parse(window.localStorage.getItem('shiftStart') || '0'));
   const [shiftTime, setShiftTime] = useState(0);
-  const [breakStart, setBreakStart] = useState(JSON.parse(window.localStorage.getItem('breakStart') || '0'));
-  const [currBreak, setCurrBreak] = useState(JSON.parse(window.localStorage.getItem('currBreak') || '0'));
-  const [breaks, setBreaks] = useState(JSON.parse(window.localStorage.getItem('breaks') || '0'));  
+  const [breakStart, setBreakStart] = useState<number>(JSON.parse(window.localStorage.getItem('breakStart') || '0'));
+  const [currBreak, setCurrBreak] = useState<number>(JSON.parse(window.localStorage.getItem('currBreak') || '0'));
+  const [breaks, setBreaks] = useState<number>(JSON.parse(window.localStorage.getItem('breaks') || '0'));  
 
   const clockIn = (): void => {
     if (!user) {
@@ -61,6 +61,7 @@ const Timer = (): ReactElement => {
     window.localStorage.setItem('shiftTime', '0');
     window.localStorage.setItem('breakStart', '0');
     window.localStorage.setItem('currBreak', '0');
+    window.localStorage.setItem('breaks', '0');
     document.location.reload();
   };
 
@@ -108,7 +109,7 @@ const Timer = (): ReactElement => {
         <Counter time={shiftTime} />
 
         <Button 
-          handleClick={(shiftStart) ? clockOutFinal : clockIn}
+          handleClick={(shiftStart) ? clockOut : clockIn}
           styles='primary-btn grow-btn text-2xl'
           text={(shiftStart) ? 'Clock out' : 'Clock in'}
         />
@@ -136,12 +137,15 @@ const Timer = (): ReactElement => {
               breaks: breaks,
             }}
             closeModal={() => setShowSubmitModal(false)}
+            clockOut={clockOutFinal}
           />
         }
       </AnimatePresence>
 
       <AnimatePresence exitBeforeEnter>
-        {showUserModal && <UserModal />}
+        {showUserModal && 
+          <UserModal closeModal={() => setShowUserModal(false)} />
+        }
       </AnimatePresence>
     </>
   );

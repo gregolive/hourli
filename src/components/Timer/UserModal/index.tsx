@@ -4,12 +4,17 @@ import Modal from '../../Modal';
 import Button from '../../Button';
 import welcomeImg from '../../../assets/img/welcome.png';
 
-const UserModal = (): ReactElement => {
+interface UserModalProps {
+  closeModal: Function,
+};
+
+const UserModal = ({ closeModal }: UserModalProps): ReactElement => {
   const navigate = useNavigate();
 
   return (
     <Modal
-      variant='dropIn'
+      variant='flip'
+      closeModal={closeModal}
       children={
         <>
           <img

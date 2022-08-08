@@ -17,6 +17,7 @@ const ConfirmModal = ({ closeModal, confirmClockOut, time }: ConfirmProps): Reac
   return (
     <Modal
       variant='dropIn'
+      closeModal={closeModal}
       children={
         <>
           <img

@@ -1,6 +1,9 @@
 import { useState, ReactElement } from 'react';
 import axios from 'axios';
-import ConfirmModal from './Confirm';
+import Modal from '../../Modal';
+import Button from '../../Button';
+import { formatTime } from '../../../assets/helpers/formatTime';
+import congratsImg from '../../../assets/img/congrats.png';
 
 type Shift = {
   start: number;
@@ -11,11 +14,13 @@ type Shift = {
 interface SubmitModalProps {
   shift: Shift,
   closeModal: Function,
+  clockOut: Function,
 };
 
-const SubmitModal = ({ shift, closeModal }: SubmitModalProps): ReactElement => {
+const SubmitModal = ({ shift, closeModal, clockOut }: SubmitModalProps): ReactElement => {
   const { start, length, breaks } = shift;
-  const [confirmed, setConfirmed] = useState(false);
+  //const [confirmed, setConfirmed] = useState(false);
+  const timeString = (): string => `${formatTime(length, 60000)}:${formatTime(length, 1000)}`;
 
   const buildFormData = (): FormData => {
     const formData = new FormData();
@@ -27,36 +32,54 @@ const SubmitModal = ({ shift, closeModal }: SubmitModalProps): ReactElement => {
   };
 
   const handleSubmit = (): void => {
-    const formData = buildFormData();
-    const url = `${process.env.REACT_APP_SERVER_URL}/api/v1/shifts/create`;
-    const config = { headers: { 'content-type': 'multipart/form-data' } };
+    clockOut();
+    // const formData = buildFormData();
+    // const url = `${process.env.REACT_APP_SERVER_URL}/api/v1/shifts/create`;
+    // const config = { headers: { 'content-type': 'multipart/form-data' } };
 
-    axios.post(url, formData, config)
-      .then((res) => {
-        console.log(res.data);
-      }, (err) => {
-        console.log(err)
-      });
+    // axios.post(url, formData, config)
+    //   .then((res) => {
+    //     console.log(res.data);
+    //     clockOut();
+    //   }, (err) => {
+    //     console.log(err)
+    //   });
   };
 
   return (
-    <>
-      {!confirmed && 
-        <ConfirmModal
-          time={length}
-          confirmClockOut={() => setConfirmed(true)}
-          closeModal={closeModal}
-        />
-      }        
+    <Modal
+      variant='dropIn'
+      closeModal={closeModal}
+      children={
+        <>
+          <img
+            className='w-4/5 sm:w-3/5'
+            src={congratsImg}
+            alt='congratulations'
+          />
 
-      {confirmed && 
-        <ConfirmModal
-          time={length}
-          confirmClockOut={handleSubmit}
-          closeModal={closeModal}
-        />
+          <h2 className='text-3xl font-medium pt-4 pb-1'>
+            Quitting time?
+          </h2>
+          <p className='text-lg pb-4'>
+            {`Clock out of your ${timeString()} hour shift?`}
+          </p>
+          
+          <div className='flex w-full gap-3'>
+            <Button
+              handleClick={handleSubmit}
+              styles='primary-btn primary-hover-btn w-full'
+              text='Clock out'
+            />
+            <Button
+              handleClick={closeModal}
+              styles='secondary-btn secondary-hover-btn w-full'
+              text='Cancel'
+            />
+          </div>
+        </>
       }
-    </>
+    />
   );
 };
 

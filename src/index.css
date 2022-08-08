@@ -73,7 +73,7 @@
 
   .modal {
     @apply theme-colors rounded-lg
-    grid justify-items-center
+    grid justify-items-center relative
     p-5 w-4/5 lg:w-2/5 md:w-3/5
   }
 
