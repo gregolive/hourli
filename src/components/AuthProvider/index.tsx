@@ -1,10 +1,12 @@
 import { useState, createContext, useContext, useEffect, ReactElement } from 'react';
-import { Navigate, useNavigate, useLocation } from 'react-router-dom';
+import { Navigate, useNavigate } from 'react-router-dom';
 import axios, { AxiosResponse } from 'axios';
 import { User } from '../../../types';
+import Error500 from '../Error/500';
 
 interface AuthContextProvider {
   user: User | null,
+  serverError: boolean,
   handleLogin: Function,
   handleLogout: Function,
 };
@@ -13,18 +15,18 @@ const AuthContext = createContext<AuthContextProvider>({} as AuthContextProvider
 
 const AuthProvider = ({ children }: any) => {
   const navigate = useNavigate();
-  const location = useLocation();
   const [user, setUser] = useState<User | null>(null);
-
-  // navigate when user updates
-  useEffect(() => {
-    navigate(location.pathname); // eslint-disable-next-line
-  }, [user]);
+  const [serverError, setServerError] = useState(false);
 
   const getUser = (): void => {
     axios.get(`${process.env.REACT_APP_SERVER_URL}/api/v1/auth/user`, { withCredentials: true })
       .then((res: AxiosResponse) => {
-        if (res.data) setUser(res.data);
+        if (res.data) {
+          setServerError(false);
+          setUser(res.data);
+        }
+      }, (err) => {
+        setServerError(true);
       });
   };
 
@@ -45,7 +47,7 @@ const AuthProvider = ({ children }: any) => {
       });
   };
 
-  const value: AuthContextProvider = { user, handleLogin, handleLogout };
+  const value: AuthContextProvider = { user, serverError, handleLogin, handleLogout };
 
   return (
     <AuthContext.Provider value={value}>
@@ -56,18 +58,30 @@ const AuthProvider = ({ children }: any) => {
 
 const useAuth = () => useContext(AuthContext);
 
-const ProtectedRoute = ({ children }: any): ReactElement => {
-  const { user } = useAuth();
+// Route accessible to authenticated users only
+const AuthenticatedRoute = ({ children }: any): ReactElement => {
+  const { user, serverError } = useAuth();
   
+  if (serverError) return <Error500 />;
   if (!user) return <Navigate to='/login' replace />;
   return children;
 };
 
+// Route accessible to unauthenticated users only
 const UnauthenticatedRoute = ({ children }: any): ReactElement => {
-  const { user } = useAuth();
+  const { user, serverError } = useAuth();
   
+  if (serverError) return <Error500 />;
   if (user) return <Navigate to='/' replace />;
   return children;
 };
 
-export { AuthProvider, useAuth, ProtectedRoute, UnauthenticatedRoute };
+// Route accessible to all users
+const UnprotectedRoute = ({ children }: any): ReactElement => {
+  const { serverError } = useAuth();
+  
+  if (serverError) return <Error500 />;
+  return children;
+};
+
+export { AuthProvider, useAuth, AuthenticatedRoute, UnauthenticatedRoute, UnprotectedRoute };

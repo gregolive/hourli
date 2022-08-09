@@ -1,6 +1,6 @@
 import { ReactElement } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import { AuthProvider, ProtectedRoute, UnauthenticatedRoute } from './components/AuthProvider';
+import { AuthProvider, AuthenticatedRoute, UnauthenticatedRoute, UnprotectedRoute } from './components/AuthProvider';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import Timer from './components/Timer';
@@ -16,7 +16,7 @@ const App = (): ReactElement => {
           <Routes>
             <Route
               path='/'
-              element={<Timer />}
+              element={<UnprotectedRoute><Timer /></UnprotectedRoute>}
             />
             <Route
               path='/register'
