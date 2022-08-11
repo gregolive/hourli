@@ -9,7 +9,7 @@
   }
 
   .app {
-    @apply theme-colors h-screen w-screen
+    @apply theme-colors min-h-screen w-screen
     flex flex-col items-center justify-between
   }
 

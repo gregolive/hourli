@@ -1,6 +1,8 @@
 import { ReactElement } from 'react';
+import { motion } from 'framer-motion';
 import { BiCoffeeTogo } from 'react-icons/bi';
 import Button from '../../Button';
+import variants from '../../../assets/helpers/motionVariants';
 import { formatTime } from '../../../assets/helpers/formatTime';
 
 interface TimerMainProps {
@@ -39,7 +41,13 @@ const BreakInfo = ({ time }: SubComponentProps): ReactElement => {
 
 const TimerMain = ({ shiftStart, shiftTime, breakStart, handleClockClick, handleBreakClick }: TimerMainProps): ReactElement => {
   return (
-    <div className='grid grid-cols-2 gap-x-3 gap-y-5'>
+    <motion.div
+      className='grid grid-cols-2 gap-x-3 gap-y-5'
+      variants={variants.slideIn}
+      initial='hidden'
+      animate='visible'
+      exit='exit'
+    >
       <Counter time={shiftTime} />
 
       <Button 
@@ -60,7 +68,7 @@ const TimerMain = ({ shiftStart, shiftTime, breakStart, handleClockClick, handle
           <BreakInfo time={Date.now() - breakStart} />
         }
       </div>
-    </div>
+    </motion.div>
   );
 };
 

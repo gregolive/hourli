@@ -2,6 +2,7 @@ type VariantProperty = {
   opacity: number;
   transition?: any;
   transform?: any;
+  x?: string;
   y?: string;
 };
 
@@ -30,6 +31,26 @@ const variants: { [key: string]: Variant } = {
     exit: {
       opacity: 0,
       y: '100vh',
+    },
+  },
+  slideIn: {
+    hidden: {
+      opacity: 0,
+      x: '-100vw',
+    },
+    visible: {
+      opacity: 1,
+      x: '0',
+      transition: {
+        duration: 1,
+        type: 'spring',
+        damping: 25,
+        stiffness: 500,
+      },
+    },
+    exit: {
+      opacity: 0,
+      x: '100vw',
     },
   },
   flip: {

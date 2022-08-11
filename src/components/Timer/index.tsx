@@ -2,13 +2,13 @@ import { useState, useEffect, ReactElement } from 'react';
 import { useAuth } from '../AuthProvider';
 import { AnimatePresence } from 'framer-motion';
 import TimerMain from './Main';
-import PayPeriodModal from './PayPeriodModal'
+import PayPeriodForm from './PayPeriodForm'
 import SubmitModal from './SubmitModal';
 import UserModal from './UserModal';
 
 const Timer = (): ReactElement => {
   const { user } = useAuth();
-  const [showPayPeriodModal, setShowPayPeriodModal] = useState((user && user.payPeriodStart) ? false : true);
+  const [showPayPeriod, setShowPayPeriod] = useState(user && typeof user.payPeriodStart === 'undefined');
   const [showSubmitModal, setShowSubmitModal] = useState(false);
   const [showUserModal, setShowUserModal] = useState(false);
   const [shiftStart, setShiftStart] = useState<number>(JSON.parse(window.localStorage.getItem('shiftStart') || '0'));
@@ -83,20 +83,22 @@ const Timer = (): ReactElement => {
 
     return () => clearTimeout(tock);
   }, [breakStart, currBreak]);
-
+console.log(showPayPeriod)
   return (
     <>
-      <TimerMain
-        shiftStart={shiftStart}
-        shiftTime={shiftTime}
-        breakStart={breakStart}
-        handleClockClick={(shiftStart) ? clockOut : clockIn}
-        handleBreakClick={(breakStart) ? offBreak : onBreak}
-      />
-
       <AnimatePresence exitBeforeEnter>
-        {showPayPeriodModal &&
-          <PayPeriodModal closeModal={() => setShowPayPeriodModal(false)} />}
+        {(user && showPayPeriod) ? (
+          <PayPeriodForm closeModal={() => setShowPayPeriod(false)} key='payPeriodForm' />
+        ) : (
+          <TimerMain
+            shiftStart={shiftStart}
+            shiftTime={shiftTime}
+            breakStart={breakStart}
+            handleClockClick={(shiftStart) ? clockOut : clockIn}
+            handleBreakClick={(breakStart) ? offBreak : onBreak}
+            key='main'
+          />
+        )}
       </AnimatePresence>
       
       <AnimatePresence exitBeforeEnter>
