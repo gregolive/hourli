@@ -6,7 +6,7 @@ import { IoIosCloseCircle } from 'react-icons/io';
 
 interface ModalProps {
   variant: string,
-  closeModal: Function,
+  closeModal: Function | null,
   children: ReactElement,
 };
 
@@ -23,13 +23,15 @@ const SubmitModal = ({ variant, closeModal, children }: ModalProps): ReactElemen
       >
         {children}
 
-        <button 
-          className='absolute top-4 right-4 text-gray-400'
-          type='button'
-          onClick={() => closeModal()}
-        >
-          <IoIosCloseCircle size='28' />
-        </button>
+        {closeModal &&
+          <button 
+            className='absolute top-4 right-4 text-gray-400'
+            type='button'
+            onClick={() => closeModal()}
+          >
+            <IoIosCloseCircle size='28' />
+          </button>
+        }
       </motion.div>
     </Backdrop>
   );

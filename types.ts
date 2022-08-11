@@ -5,4 +5,6 @@ export type User = {
   provider: string;
   providerId: string | null;
   password: string;
+  payPeriodStart?: number;
+  payPeriodType?: string;
 };
