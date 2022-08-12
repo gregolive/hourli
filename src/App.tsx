@@ -6,6 +6,7 @@ import Footer from './components/Footer';
 import Timer from './components/Timer';
 import Register from './components/Register';
 import Login from './components/Login';
+import ShiftsIndex from './components/Shifts/Timesheet';
 import Error404 from './components/Error/404';
 
 const App = (): ReactElement => {
@@ -26,6 +27,10 @@ const App = (): ReactElement => {
             <Route
               path='/login'
               element={<UnauthenticatedRoute><Login /></UnauthenticatedRoute>}
+            />
+            <Route
+              path='/timesheet'
+              element={<AuthenticatedRoute><ShiftsIndex /></AuthenticatedRoute>}
             />
             <Route
               path='*'

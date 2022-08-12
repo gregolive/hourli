@@ -50,10 +50,8 @@ const Register = (): ReactElement => {
 
     axios.post(url, formData, config)
       .then((res) => {
-        if (res.status === 200) {
-          handleLogin();
-          navigate('/');
-        }
+        handleLogin();
+        navigate('/');
       }, (err) => {
         setSubmitError(err.response.data.errors);
         setLoading(false);

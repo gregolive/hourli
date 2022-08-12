@@ -46,10 +46,8 @@ const Login = (): ReactElement => {
 
     axios.post(url, formData, config)
       .then((res) => {
-        if (res.status === 200) {
-          handleLogin();
-          navigate('/');
-        }
+        handleLogin();
+        navigate('/');
       }, (err) => {
         // format submit error with input key, server key is always 'message'
         updateSubmitError(err.response.data.msg.message);

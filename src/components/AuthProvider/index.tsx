@@ -21,10 +21,8 @@ const AuthProvider = ({ children }: any) => {
   const getUser = (): void => {
     axios.get(`${process.env.REACT_APP_SERVER_URL}/api/v1/auth/user`, { withCredentials: true })
       .then((res: AxiosResponse) => {
-        if (res.data) {
-          setServerError(false);
-          setUser(res.data);
-        }
+        setServerError(false);
+        setUser(res.data);
       }, (err) => {
         setServerError(true);
       });

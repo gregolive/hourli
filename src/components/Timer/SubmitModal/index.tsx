@@ -2,7 +2,7 @@ import { ReactElement } from 'react';
 import axios from 'axios';
 import Modal from '../../Modal';
 import Button from '../../Button';
-import { formatTime } from '../../../assets/helpers/formatTime';
+import { formatClock } from '../../../assets/helpers/formatTime';
 import congratsImg from '../../../assets/img/congrats.png';
 
 type Shift = {
@@ -58,7 +58,7 @@ const SubmitModal = ({ shift, closeModal, clockOut }: SubmitModalProps): ReactEl
             Quitting time?
           </h2>
           <p className='text-lg pb-4'>
-            {`Clock out of your ${formatTime(length, 3600000)}:${formatTime(length, 60000)} hour shift?`}
+            {`Clock out of your ${formatClock(length)} hour shift?`}
           </p>
           
           <div className='flex w-full gap-3'>

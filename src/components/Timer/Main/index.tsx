@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import { BiCoffeeTogo } from 'react-icons/bi';
 import Button from '../../Button';
 import variants from '../../../assets/helpers/motionVariants';
-import { formatTime } from '../../../assets/helpers/formatTime';
+import { formatMins, formatHours, formatClock } from '../../../assets/helpers/formatTime';
 
 interface TimerMainProps {
   shiftStart: number,
@@ -20,9 +20,9 @@ interface SubComponentProps {
 const Counter = ({ time }: SubComponentProps): ReactElement => {
   return (
     <div className='text-8xl sm:text-9xl flex justify-center col-span-2'>
-      <span className='w-32 sm:w-40 text-end'>{formatTime(time, 3600000)}</span>
+      <span className='w-32 sm:w-40 text-end'>{formatHours(time)}</span>
       <span>:</span>
-      <span className='w-32 sm:w-40'>{formatTime(time, 60000)}</span>
+      <span className='w-32 sm:w-40'>{formatMins(time)}</span>
     </div>
   );
 };
@@ -33,7 +33,7 @@ const BreakInfo = ({ time }: SubComponentProps): ReactElement => {
       <BiCoffeeTogo />
       <span>On break</span>
       <span className='w-14'>
-        {formatTime(time, 3600000)}:{formatTime(time, 60000)}
+        {formatClock(time)}
       </span>
     </>
   );

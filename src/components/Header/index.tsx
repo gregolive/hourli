@@ -2,7 +2,7 @@ import { ReactElement } from 'react';
 import { useAuth } from '../AuthProvider';
 import useDarkTheme from '../../hooks/useDarkTheme';
 import { useNavigate } from 'react-router-dom'      
-import { FaSun, FaMoon, FaUserPlus } from 'react-icons/fa';
+import { FaSun, FaMoon, FaUserPlus, FaRegCalendar } from 'react-icons/fa';
 import { FiLogIn, FiLogOut } from 'react-icons/fi';
 
 interface IconBtnProps {
@@ -71,6 +71,11 @@ const HeaderButtons = (): ReactElement => {
   
       {(user) ? (
         <>
+          <HeaderIconBtn
+            Icon={<FaRegCalendar size='22' className='text-teal-500' />}
+            handleClick={() => navigate('/timesheet')}
+            tooltip='Timesheet'
+          />
           <HeaderIconBtn
             Icon={<FiLogOut size='25' className='text-teal-500' />}
             handleClick={() => handleLogout()}

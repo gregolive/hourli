@@ -37,7 +37,6 @@ const PayPeriodForm = ({ closeModal }: PayPeriodModalProps): ReactElement => {
       .then((res) => {
         closeModal();
       }, (err) => {
-        console.log(err);
         setSubmitError(true);
       });
   };
