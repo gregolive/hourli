@@ -1,6 +1,7 @@
 import { useState, useEffect, ReactElement } from 'react';
 import { useAuth } from '../AuthProvider';
 import { AnimatePresence } from 'framer-motion';
+import CircularProgress from '@mui/material/CircularProgress';
 import TimerMain from './Main';
 import PayPeriodForm from './PayPeriodForm'
 import SubmitModal from './SubmitModal';
@@ -8,7 +9,8 @@ import UserModal from './UserModal';
 
 const Timer = (): ReactElement => {
   const { user } = useAuth();
-  const [showPayPeriod, setShowPayPeriod] = useState(user && typeof user.payPeriodStart === 'undefined');
+  const [loading, setLoading] = useState(true);
+  const [showPayPeriod, setShowPayPeriod] = useState(false);
   const [showSubmitModal, setShowSubmitModal] = useState(false);
   const [showUserModal, setShowUserModal] = useState(false);
   const [shiftStart, setShiftStart] = useState<number>(JSON.parse(window.localStorage.getItem('shiftStart') || '0'));
@@ -16,6 +18,12 @@ const Timer = (): ReactElement => {
   const [breakStart, setBreakStart] = useState<number>(JSON.parse(window.localStorage.getItem('breakStart') || '0'));
   const [currBreak, setCurrBreak] = useState<number>(JSON.parse(window.localStorage.getItem('currBreak') || '0'));
   const [breaks, setBreaks] = useState<number>(JSON.parse(window.localStorage.getItem('breaks') || '0'));
+
+  // Check if user has set up account
+  useEffect(() => {
+    if (user && typeof user.payPeriodStart === 'undefined') setShowPayPeriod(true);
+    setLoading(false);
+  }, [user]);
 
   const clockIn = (): void => {
     if (!user) {
@@ -83,44 +91,49 @@ const Timer = (): ReactElement => {
 
     return () => clearTimeout(tock);
   }, [breakStart, currBreak]);
-console.log(showPayPeriod)
-  return (
-    <>
-      <AnimatePresence exitBeforeEnter>
-        {(user && showPayPeriod) ? (
-          <PayPeriodForm closeModal={() => setShowPayPeriod(false)} key='payPeriodForm' />
-        ) : (
-          <TimerMain
-            shiftStart={shiftStart}
-            shiftTime={shiftTime}
-            breakStart={breakStart}
-            handleClockClick={(shiftStart) ? clockOut : clockIn}
-            handleBreakClick={(breakStart) ? offBreak : onBreak}
-            key='main'
-          />
-        )}
-      </AnimatePresence>
-      
-      <AnimatePresence exitBeforeEnter>
-        {showSubmitModal &&
-          <SubmitModal 
-            shift={{
-              start: shiftStart,
-              length: shiftTime,
-              breaks: breaks,
-            }}
-            closeModal={() => setShowSubmitModal(false)}
-            clockOut={clockOutFinal}
-          />
-        }
-      </AnimatePresence>
 
-      <AnimatePresence exitBeforeEnter>
-        {showUserModal && 
-          <UserModal closeModal={() => setShowUserModal(false)} />
-        }
-      </AnimatePresence>
-    </>
+  return (
+    (loading) ? (
+      <CircularProgress className='!text-teal-500' />
+    ) : (
+      <>
+        <AnimatePresence exitBeforeEnter>
+          {(user && showPayPeriod) ? (
+            <PayPeriodForm closeModal={() => setShowPayPeriod(false)} key='payPeriodForm' />
+          ) : (
+            (!loading) && 
+              <TimerMain
+                shiftStart={shiftStart}
+                shiftTime={shiftTime}
+                breakStart={breakStart}
+                handleClockClick={(shiftStart) ? clockOut : clockIn}
+                handleBreakClick={(breakStart) ? offBreak : onBreak}
+                key='main'
+              />
+          )}
+        </AnimatePresence>
+        
+        <AnimatePresence exitBeforeEnter>
+          {showSubmitModal &&
+            <SubmitModal 
+              shift={{
+                start: shiftStart,
+                length: shiftTime,
+                breaks: breaks,
+              }}
+              closeModal={() => setShowSubmitModal(false)}
+              clockOut={clockOutFinal}
+            />
+          }
+        </AnimatePresence>
+
+        <AnimatePresence exitBeforeEnter>
+          {showUserModal && 
+            <UserModal closeModal={() => setShowUserModal(false)} />
+          }
+        </AnimatePresence>
+      </>
+    )
   );
 };
 
