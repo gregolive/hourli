@@ -58,13 +58,13 @@ const PayPeriodForm = ({ closeModal }: PayPeriodModalProps): ReactElement => {
 
   return (
     <motion.div
-      className='flex flex-col items-center w-10/12 max-w-lg'
+      className='flex flex-col items-center w-full'
       variants={variants.slideIn}
       initial='hidden'
       animate='visible'
       exit='exit'
     >
-      <h2 className='text-3xl font-medium pt-4 pb-2'>
+      <h2 className='text-4xl font-medium pb-4'>
         Welcome to <span className='font-semibold'>hour.li</span> 👋
       </h2>
       <p className='text-lg leading-6 pb-4'>

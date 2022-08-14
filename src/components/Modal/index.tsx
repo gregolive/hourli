@@ -19,6 +19,7 @@ const SubmitModal = ({ variant, closeModal, children }: ModalProps): ReactElemen
         initial='hidden'
         animate='visible'
         exit='exit'
+        key='modal'
         drag
       >
         {children}

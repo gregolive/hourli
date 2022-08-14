@@ -12,6 +12,7 @@ const Backdrop = ({ children }: BackdropProps): ReactElement => {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
+      key='backdrop'
     >
       {children}
     </motion.div>

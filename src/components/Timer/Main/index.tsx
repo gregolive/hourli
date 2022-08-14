@@ -41,8 +41,8 @@ const BreakInfo = ({ time }: SubComponentProps): ReactElement => {
 
 const TimerMain = ({ shiftStart, shiftTime, breakStart, handleClockClick, handleBreakClick }: TimerMainProps): ReactElement => {
   return (
-    <motion.div
-      className='grid grid-cols-2 gap-x-3 gap-y-5'
+    <motion.div 
+      className='grid grid-cols-2 gap-x-3 gap-y-5 w-3/4 self-center'
       variants={variants.slideIn}
       initial='hidden'
       animate='visible'

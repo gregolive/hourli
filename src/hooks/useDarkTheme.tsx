@@ -6,8 +6,9 @@ const useDarkTheme = () => {
 
   useEffect(() => {
     const bodyClass = window.document.body.classList;
-
     enabled ? bodyClass.add('dark') : bodyClass.remove('dark');
+  
+    window.document.documentElement.style.colorScheme = (enabled) ? 'dark' : 'light';
   }, [enabled]);
 
   return [enabled, setEnabled];

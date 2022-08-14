@@ -11,6 +11,11 @@ interface UserModalProps {
 const UserModal = ({ closeModal }: UserModalProps): ReactElement => {
   const navigate = useNavigate();
 
+  const handleClick = (url: string): void => {
+    closeModal(closeModal);
+    navigate(url);
+  };
+
   return (
     <Modal
       variant='flip'
@@ -32,12 +37,12 @@ const UserModal = ({ closeModal }: UserModalProps): ReactElement => {
           
           <div className='flex w-full gap-3'>
             <Button
-              handleClick={() => navigate('/login')}
+              handleClick={() => handleClick('/login')}
               styles='primary-btn primary-hover-btn w-full'
               text='Sign in'
             />
             <Button
-              handleClick={() => navigate('/register')}
+              handleClick={() => handleClick('/register')}
               styles='secondary-btn secondary-hover-btn w-full'
               text='Register'
             />

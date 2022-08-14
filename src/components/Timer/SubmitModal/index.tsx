@@ -58,7 +58,7 @@ const SubmitModal = ({ shift, closeModal, clockOut }: SubmitModalProps): ReactEl
             Quitting time?
           </h2>
           <p className='text-lg pb-4'>
-            {`Clock out of your ${formatClock(length)} hour shift?`}
+            Clock out of your {formatClock(length)} hour shift?
           </p>
           
           <div className='flex w-full gap-3'>

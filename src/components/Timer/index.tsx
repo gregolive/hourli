@@ -1,11 +1,12 @@
 import { useState, useEffect, ReactElement } from 'react';
 import { useAuth } from '../AuthProvider';
-import { AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import CircularProgress from '@mui/material/CircularProgress';
 import TimerMain from './Main';
 import PayPeriodForm from './PayPeriodForm'
 import SubmitModal from './SubmitModal';
 import UserModal from './UserModal';
+import variants from '../../assets/helpers/motionVariants';
 
 const Timer = (): ReactElement => {
   const { user } = useAuth();
@@ -97,11 +98,20 @@ const Timer = (): ReactElement => {
       <CircularProgress className='!text-teal-500' />
     ) : (
       <>
-        <AnimatePresence exitBeforeEnter>
-          {(user && showPayPeriod) ? (
-            <PayPeriodForm closeModal={() => setShowPayPeriod(false)} key='payPeriodForm' />
-          ) : (
-            (!loading) && 
+        <motion.div
+          className='flex justify-center w-10/12 max-w-lg'
+          variants={variants.slideIn}
+          initial='hidden'
+          animate='visible'
+          exit='exit'
+        >
+          <AnimatePresence exitBeforeEnter>
+            {(user && showPayPeriod) ? (
+              <PayPeriodForm
+                closeModal={() => setShowPayPeriod(false)}
+                key='payPeriodForm'
+              />
+            ) : (
               <TimerMain
                 shiftStart={shiftStart}
                 shiftTime={shiftTime}
@@ -110,9 +120,10 @@ const Timer = (): ReactElement => {
                 handleBreakClick={(breakStart) ? offBreak : onBreak}
                 key='main'
               />
-          )}
-        </AnimatePresence>
-        
+            )}
+          </AnimatePresence>
+        </motion.div>
+
         <AnimatePresence exitBeforeEnter>
           {showSubmitModal &&
             <SubmitModal 
@@ -123,13 +134,15 @@ const Timer = (): ReactElement => {
               }}
               closeModal={() => setShowSubmitModal(false)}
               clockOut={clockOutFinal}
+              key='submitModal'
             />
           }
-        </AnimatePresence>
 
-        <AnimatePresence exitBeforeEnter>
           {showUserModal && 
-            <UserModal closeModal={() => setShowUserModal(false)} />
+            <UserModal
+              closeModal={() => setShowUserModal(false)}
+              key='userModal'
+            />
           }
         </AnimatePresence>
       </>

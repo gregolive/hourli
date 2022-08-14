@@ -1,9 +1,11 @@
 import { useState, useRef, ReactElement } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../AuthProvider';
+import { motion } from 'framer-motion';
 import axios from 'axios';
 import CircularProgress from '@mui/material/CircularProgress';
 import AuthButtons from '../AuthButtons';
+import variants from '../../assets/helpers/motionVariants';
 
 type ErrorMessage = {
   value: string;
@@ -98,7 +100,13 @@ const Register = (): ReactElement => {
     (loading) ? (
       <CircularProgress className='!text-teal-500' />
     ) : (
-      <div className='w-10/12 max-w-lg'>
+      <motion.div
+        className='w-10/12 max-w-lg'
+        variants={variants.slideIn}
+        initial='hidden'
+        animate='visible'
+        exit='exit'
+      >
         <h2 className='text-3xl pb-4'>Create Account</h2>
         
         <form className='grid gap-3' ref={form.current} onSubmit={handleSubmit} noValidate>
@@ -173,7 +181,7 @@ const Register = (): ReactElement => {
         <hr className='border-t my-5 dark:border-gray-600' />
 
         <AuthButtons />
-      </div>
+      </motion.div>
     )
   );
 };

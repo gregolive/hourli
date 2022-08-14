@@ -1,7 +1,7 @@
 import { ReactElement } from 'react';
 import { useAuth } from '../AuthProvider';
 import useDarkTheme from '../../hooks/useDarkTheme';
-import { useNavigate } from 'react-router-dom'      
+import { useNavigate, Link } from 'react-router-dom';   
 import { FaSun, FaMoon, FaUserPlus, FaRegCalendar } from 'react-icons/fa';
 import { FiLogIn, FiLogOut } from 'react-icons/fi';
 
@@ -13,7 +13,7 @@ interface IconBtnProps {
 
 const HeaderTitle = (): ReactElement => {
   return (
-    <a href='/' className='group'>
+    <Link to='/' className='group'>
       <h1 className='text-4xl font-medium'>
         <span className='text-teal-500 group-hover:text-neutral-900 dark:group-hover:text-neutral-50 transition-all duration-300'>
           hour
@@ -22,7 +22,7 @@ const HeaderTitle = (): ReactElement => {
           .li
         </span>
       </h1>
-    </a>
+    </Link>
   );
 };
 
