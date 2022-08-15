@@ -3,6 +3,7 @@ import { useAuth } from '../AuthProvider';
 import useDarkTheme from '../../hooks/useDarkTheme';
 import { useNavigate, Link } from 'react-router-dom';   
 import { FaSun, FaMoon, FaUserPlus, FaRegCalendar } from 'react-icons/fa';
+import { TiHome } from 'react-icons/ti';
 import { FiLogIn, FiLogOut } from 'react-icons/fi';
 
 interface IconBtnProps {
@@ -68,6 +69,12 @@ const HeaderButtons = (): ReactElement => {
   return (
     <div className='flex items-center gap-3'>
       <ThemeSwitch />
+
+      <HeaderIconBtn
+        Icon={<TiHome size='28' className='text-teal-500' />}
+        handleClick={() => navigate('/')}
+        tooltip='Home'
+      />
   
       {(user) ? (
         <>

@@ -55,14 +55,18 @@
     @apply bg-sky-500 text-white hover:bg-sky-400
   }
 
+  .close-btn {
+    @apply text-gray-500 hover:text-gray-600 dark:text-gray-400 dark:hover:text-gray-300
+    p-0 absolute top-4 right-4 
+  }
+
   .header {
     @apply flex items-center justify-between 
     w-10/12 max-w-lg pt-2 sm:py-3
   }
 
   .header-icon {
-    @apply relative flex
-    transition-all duration-300
+    @apply relative flex transition-all duration-300
   }
 
   .header-tooltip {

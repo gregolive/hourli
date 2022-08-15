@@ -20,13 +20,12 @@ const SubmitModal = ({ variant, closeModal, children }: ModalProps): ReactElemen
         animate='visible'
         exit='exit'
         key='modal'
-        drag
       >
         {children}
 
         {closeModal &&
           <button 
-            className='absolute top-4 right-4 text-gray-400'
+            className='btn close-btn'
             type='button'
             onClick={() => closeModal()}
           >
