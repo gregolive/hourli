@@ -1,14 +1,12 @@
 import { useState, useEffect, ReactElement } from 'react';
-import { useAuth } from '../../AuthProvider';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import axios from 'axios';
 import CircularProgress from '@mui/material/CircularProgress';
 import { Shift } from '../../../../types';
 import variants from '../../../assets/helpers/motionVariants';
-import { timeToDate, formatClock } from '../../../assets/helpers/formatTime';
+import { timeToDate } from '../../../assets/helpers/formatTime';
 
 const ShiftsIndex = (): ReactElement => {
-  const { user } = useAuth();
   const [loading, setLoading] = useState(true);
   const [shifts, setShifts] = useState<Shift[]>([]);
 
@@ -26,8 +24,6 @@ const ShiftsIndex = (): ReactElement => {
         setLoading(false);
       });
   }, []);
-
-  console.log(shifts)
 
   return (
     (loading) ? (
