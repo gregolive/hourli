@@ -2,7 +2,7 @@ import { ReactElement } from 'react';
 import axios from 'axios';
 import Modal from '../../Modal';
 import Button from '../../Button';
-import { formatClock } from '../../../assets/helpers/formatTime';
+import { formatClock } from '../../../assets/helpers/dateTime';
 import congratsImg from '../../../assets/img/congrats.png';
 
 type Shift = {

@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import { BiCoffeeTogo } from 'react-icons/bi';
 import Button from '../../Button';
 import variants from '../../../assets/helpers/motionVariants';
-import { formatMins, formatHours, formatClock } from '../../../assets/helpers/formatTime';
+import { formatMins, formatHours, formatClock } from '../../../assets/helpers/dateTime';
 
 interface TimerMainProps {
   shiftStart: number,

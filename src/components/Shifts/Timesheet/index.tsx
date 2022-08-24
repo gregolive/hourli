@@ -1,14 +1,18 @@
 import { useState, useEffect, ReactElement } from 'react';
+import { useAuth } from '../../AuthProvider';
 import { motion } from 'framer-motion';
 import axios from 'axios';
 import CircularProgress from '@mui/material/CircularProgress';
 import { Shift } from '../../../../types';
 import variants from '../../../assets/helpers/motionVariants';
-import { timeToDate } from '../../../assets/helpers/formatTime';
+import { timeToDate, formatPayPeriod } from '../../../assets/helpers/dateTime';
+import Table from './Table';
 
 const ShiftsIndex = (): ReactElement => {
+  const { user } = useAuth();
   const [loading, setLoading] = useState(true);
   const [shifts, setShifts] = useState<Shift[]>([]);
+  const [payPeriods, setPayPeriods] = useState<any[]>([]);
 
   // Get shifts on mount
   useEffect(() => {
@@ -18,6 +22,7 @@ const ShiftsIndex = (): ReactElement => {
     axios.get(url, config)
       .then((res) => {
         setShifts(res.data.shifts);
+        setPayPeriods(formatPayPeriod(res.data.shifts, user!.payPeriodType));
         setLoading(false);
       }, (err) => {
         console.log(err);
@@ -38,11 +43,7 @@ const ShiftsIndex = (): ReactElement => {
       >
         <h2 className='text-4xl font-medium pb-4'>Timesheet</h2>
 
-        {shifts.map((shift, index) =>
-          <p key={index}>
-            {timeToDate(shift.start)}
-          </p>
-        )}
+        <Table shifts={shifts} payPeriods={payPeriods} />
       </motion.div>
     )
   );
