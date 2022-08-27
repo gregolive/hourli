@@ -8,6 +8,7 @@ interface TableProps {
 };
 
 const Table = ({ shifts, payPeriods }: TableProps): ReactElement => {
+  console.log(payPeriods)
   return (
     <>
       {payPeriods.map((period, index) =>
